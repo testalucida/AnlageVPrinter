@@ -37,19 +37,21 @@ class PageTwo : public Fl_Group {
     public:
         PageTwo(int x, int y, int w, int h);
     private:
-        FlatOutput *_stnrNameEtc;
-        FlatOutput *_afaLinear;
-        FlatOutput *_afaDegr;
-        FlatOutput *_afaProzent;
-        FlatOutput *_afaWieVj;
-        FlatOutput *_afaBetrag;
-        FlatOutput *_aufwandVollAbz;
-        FlatOutput *_aufwand5JVert;
-        FlatOutput *_aufwand5JAbzVj;
-        FlatOutput *_nkMieter;
-        FlatOutput *_verwaltKosten;
-        FlatOutput *_sonstKosten;
-        FlatOutput *_summeWK;
+        FlatOutput *_pStnrNameEtc;
+        FlatOutput *_pAfaLinear;
+        FlatOutput *_pAfaDegr;
+        FlatOutput *_pAfaProzent;
+        FlatOutput *_pAfaWieVj;
+        FlatOutput *_pAfaBetrag;
+        FlatOutput *_pAufwandVollAbz;
+        FlatOutput *_pAufwand5JVert;
+        FlatOutput *_pAufwand5JAbzVj;
+        FlatOutput *_pNkMieter; //Zeile 46
+        FlatOutput *_pVerwaltKostenBez;
+        FlatOutput *_pVerwaltKosten;
+        FlatOutput *_pSonstKostenBez;
+        FlatOutput *_pSonstKosten;
+        FlatOutput *_pSummeWK;
 };
 
 class AnlageV : public Fl_Group {
@@ -57,6 +59,7 @@ class AnlageV : public Fl_Group {
         AnlageV(int x, int y, int w, int h);
         virtual ~AnlageV();
         void changePage();
+        Fl_Group* getPage(int idx) const;
 
     protected:
 

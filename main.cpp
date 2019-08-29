@@ -58,18 +58,18 @@ Fl_Printer allows to use all drawing, color, text, image, and clip FLTK function
 AnlageV *pAnl;
 
 void printAnlageV( Fl_Widget *pW, void *v) {
-    AnlageV *widget = pAnl; // = new AnlageV(0, 0, 624, 975);
     int width, height;
     Fl_Printer *printer = new Fl_Printer();
     if ( printer->start_job( 1 ) == 0 ) {
         printer->start_page();
         printer->printable_rect( &width, &height );
         fl_color( FL_BLACK );
-        fl_line_style( FL_SOLID, 1 );
-        fl_rect( 0, 0, width, height );
+        //fl_line_style( FL_SOLID, 1 );
+        //&fl_rect( 0, 0, width, height );
         //fl_font( FL_HELVETICA, 8 );
 
         printer->origin( width/2, height/2 );
+        Fl_Group *widget = pAnl->getPage(2);
         printer->print_widget( widget, -widget->w()/2, -widget->h()/2 );
         printer->end_page();
         printer->end_job();

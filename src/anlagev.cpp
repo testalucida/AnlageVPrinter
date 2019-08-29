@@ -87,7 +87,56 @@ PageOne::PageOne(int x, int y, int w, int h)
 PageTwo::PageTwo(int x, int y, int w, int h)
 : Fl_Group(x, y, w, h)
 {
+    begin();
+    int top = 5;
+    int Y = 90 + top;
 
+    _pStnrNameEtc = new FlatOutput(150, Y, 200);
+    _pStnrNameEtc->textsize(8);
+    _pStnrNameEtc->value("217/235/50499  Kendel, Martin  Lfd.Nr. 2");
+
+    Y += 193;
+    int xL = 57;
+    _pAfaLinear = new FlatOutput(xL, Y, 15);
+    _pAfaLinear->value("X");
+
+    _pAfaWieVj = new FlatOutput(204, Y, 15);
+    _pAfaWieVj->value("X");
+
+    int xR = 483;
+    _pAfaBetrag = new FlatOutput(xR, Y, 40);
+    _pAfaBetrag->value("2252");
+
+    Y += 145;
+    _pAufwandVollAbz = new FlatOutput(xR, Y, 40);
+    _pAufwandVollAbz->value("6552");
+
+    Y += 80;
+    _pAufwand5JAbzVj = new FlatOutput(130, Y, 40);
+    _pAufwand5JAbzVj->value("4300");
+
+    _pAufwand5JAbzVj = new FlatOutput(xR, Y, 40);
+    _pAufwand5JAbzVj->value("860");
+
+    Y += 155;
+    _pVerwaltKostenBez = new FlatOutput(xL, Y, 160);
+    _pVerwaltKostenBez->value("Verwaltungskosten");
+
+    _pVerwaltKosten = new FlatOutput(xR, Y, 40);
+    _pVerwaltKosten->value("813");
+
+    Y += 47;
+    _pSonstKostenBez = new FlatOutput(xL, Y, 160);
+    _pSonstKostenBez->value("Porto, Tel., Fahrtk., RA-Beratg.");
+
+    _pSonstKosten = new FlatOutput(xR, Y, 40);
+    _pSonstKosten->value("1144");
+
+    Y += 23;
+    _pSummeWK = new FlatOutput(xR, Y, 40);
+    _pSummeWK->value("11621");
+
+    end();
 }
 
 AnlageV::AnlageV(int x, int y, int w, int h)
@@ -111,6 +160,10 @@ void AnlageV::changePage() {
         _pPageOne->set_visible();
         _pShownPage = _pPageOne;
     }
+}
+
+Fl_Group* AnlageV::getPage(int idx) const {
+    return idx == 1 ? (Fl_Group*)_pPageOne : (Fl_Group*)_pPageTwo;
 }
 
 AnlageV::~AnlageV()
