@@ -60,7 +60,7 @@ AnlageV *pAnl;
 void printAnlageV( Fl_Widget *pW, void *v) {
     int width, height;
     Fl_Printer *printer = new Fl_Printer();
-    if ( printer->start_job( 1 ) == 0 ) {
+    if ( printer->start_job( 2 ) == 0 ) {
         printer->start_page();
         printer->printable_rect( &width, &height );
         fl_color( FL_BLACK );
@@ -69,9 +69,17 @@ void printAnlageV( Fl_Widget *pW, void *v) {
         //fl_font( FL_HELVETICA, 8 );
 
         printer->origin( width/2, height/2 );
-        Fl_Group *widget = pAnl->getPage(2);
+        Fl_Group *widget = pAnl->getPage(1);
         printer->print_widget( widget, -widget->w()/2, -widget->h()/2 );
         printer->end_page();
+
+        printer->start_page();
+        printer->printable_rect( &width, &height );
+        printer->origin( width/2, height/2 );
+        widget = pAnl->getPage(2);
+        printer->print_widget( widget, -widget->w()/2, -widget->h()/2 );
+        printer->end_page();
+
         printer->end_job();
     }
     delete printer;
@@ -82,19 +90,106 @@ void changePage(Fl_Widget *pW, void *) {
     pAnl->changePage();
 }
 
+///////////////////////  EXAMPLE  ///////////////////////
 
-int main_() {
-    Fl_Double_Window *pWin = new Fl_Double_Window(0, 0, 624, 975, "FLTK window");
-    pWin->align(FL_ALIGN_CLIP|FL_ALIGN_INSIDE);
-    Fl_Button *pBtn = new Fl_Button(20, 20, 80, 25, "Print");
-    pBtn->callback(printAnlageV);
+class Form : public Fl_Group {
+    public:
+        Form():
+        Fl_Group(0, 0, 600, 900)
+        {
+            begin();
+                _pPageOne = new Fl_Group(0, 0, 500, 800);
+                _pPageOne->begin();
+                    Fl_Output *pOut1 = new Fl_Output( 200, 200, 100, 30);
+                    pOut1->box(FL_FLAT_BOX);
+                    pOut1->textsize(16);
+                    pOut1->value("Page ONE");
+                _pPageOne->end();
+
+                _pPageTwo = new Fl_Group(0, 0, 500, 800);
+                _pPageTwo->begin();
+                    Fl_Output *pOut2 = new Fl_Output( 200, 200, 100, 30);
+                    pOut2->box(FL_FLAT_BOX);
+                    pOut2->textsize(16);
+                    pOut2->value("Page TWO");
+                _pPageTwo->end();
+                _pPageTwo->hide();
+
+            end();
+            _pages[0] = _pPageOne;
+            _pages[1] = _pPageTwo;
+            _current = 0;
+        }
+
+        Fl_Group* getPage(int page) {
+            if(page != _current) {
+                switchPage();
+            }
+            return _pages[page];
+        }
+
+        void switchPage() {
+            _pages[_current]->hide();
+            _current = _current == 0 ? 1 : 0;
+            _pages[_current]->set_visible();
+        }
+
+    private:
+        Fl_Group *_pPageOne;
+        Fl_Group *_pPageTwo;
+        int _current;
+        Fl_Group *_pages[2];
+};
+
+Form *pForm;
+
+void printForm(Fl_Widget*, void*) {
+    int width, height;
+    Fl_Printer *printer = new Fl_Printer();
+    if ( printer->start_job( 2 ) == 0 ) {
+        printer->start_page();
+        printer->printable_rect( &width, &height );
+        fl_color( FL_BLACK );
+
+        printer->origin( width/2, height/2 );
+        Fl_Group *widget = pForm->getPage(0);
+        printer->print_widget( widget, -widget->w()/2, -widget->h()/2 );
+        printer->end_page();
+
+        printer->start_page();
+        printer->printable_rect( &width, &height );
+        printer->origin( width/2, height/2 );
+        widget = pForm->getPage(1);
+        printer->print_widget( widget, -widget->w()/2, -widget->h()/2 );
+        printer->end_page();
+
+        printer->end_job();
+    }
+    delete printer;
+}
+
+void switchPage(Fl_Widget *pW, void *) {
+    pForm->switchPage();
+}
+
+int main() {
+    Fl_Double_Window *pWin = new Fl_Double_Window(0, 0, 500, 800, "FLTK window");
+    Fl_Button *pBtn = new Fl_Button(0, 20, 80, 25, "Print");
+    pBtn->callback(printForm);
+    Fl_Button *pBtn2 = new Fl_Button(0, 45, 80, 25, "Page");
+    pBtn2->callback(switchPage);
+
+    pForm = new Form();
+
     pWin->end();
 
     pWin->show();
     return Fl::run();
 }
 
-int main(int argc, char **argv) {
+///////////////////////////////////////////////////////////////
+
+int main_(int argc, char **argv) {
     Fl_Double_Window *pWin = new Fl_Double_Window(0, 0, 624, 975, "FLTK window");
     fl_font( FL_HELVETICA, 8 );
     pWin->align(FL_ALIGN_CLIP|FL_ALIGN_INSIDE);

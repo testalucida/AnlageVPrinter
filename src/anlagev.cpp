@@ -163,7 +163,16 @@ void AnlageV::changePage() {
 }
 
 Fl_Group* AnlageV::getPage(int idx) const {
-    return idx == 1 ? (Fl_Group*)_pPageOne : (Fl_Group*)_pPageTwo;
+    if( idx == 1) {
+        _pPageTwo->hide();
+        _pPageOne->set_visible();
+        _pShownPage = _pPageOne;
+    } else {
+        _pPageOne->hide();
+        _pPageTwo->set_visible();
+        _pShownPage = _pPageTwo;
+    }
+    return _pShownPage;
 }
 
 AnlageV::~AnlageV()

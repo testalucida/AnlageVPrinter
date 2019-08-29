@@ -66,7 +66,7 @@ class AnlageV : public Fl_Group {
     private:
         PageOne *_pPageOne;
         PageTwo *_pPageTwo;
-        Fl_Group *_pShownPage;
+        mutable Fl_Group *_pShownPage;
 };
 
 #endif // ANLAGEV_H
